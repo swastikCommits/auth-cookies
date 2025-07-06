@@ -22,11 +22,13 @@ app.post("/signin", (req, res) => {
         id: 1
     }, JWT_SECRET);
     res.cookie("token", token);
+    // will put the cookie in the set-cookie heaeder
     res.send("Logged in!");
 });
 
 app.get("/user", (req, res) => {
     const token = req.cookies.token;
+    console.log(token);
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
     // Get email of the user from the database
     res.send({
@@ -36,7 +38,8 @@ app.get("/user", (req, res) => {
 
 
 app.post("/logout", (req, res) => {
-    res.cookie("token", "ads");
+    res.clearCookie("token");
+    res.cookie("token", "");
     res.json({
         message: "Logged out!"
     })
